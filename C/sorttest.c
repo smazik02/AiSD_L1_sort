@@ -63,78 +63,103 @@ void quickSortStart(int Arr[], int len);
 
 void quickSortStart2(int Arr[], int len, int* total);
 
+void wykr1(void (*f)(int[], int), char name[], int rep);
+
+void wykr2();
+
+void wykr3();
+
+void wykr4();
+
+int main(void) {
+    /*
+    wykr1(insertionSort, "Insertion Sort", 10000);
+    printf("\n\n");
+    wykr1(selectionSort, "Selection Sort", 10000);
+    printf("\n\n");
+    wykr1(bubbleSort, "Bubble Sort", 10000);
+    printf("\n\n");
+    */
+    wykr1(heapSort, "Heap Sort", 10000);
+    printf("\n\n");
+    wykr1(mergeSortStart, "Merge Sort", 10000);
+    printf("\n\n");
+    wykr1(quickSortStart, "Quicksort", 10000);
+    return 0;
+}
+
 void wykr1(void (*f)(int[], int), char name[], int rep) {
     clock_t time;
-    long double result;
+    double result;
     printf("%s\n", name);
     for (int i = rep; i <= rep * 10; i += rep) {
-        long double result = 0;
+        double result = 0;
         int* Arr;
         for (int j = 0; j < 10; j++) {
             Arr = incr(i);
             time = clock();
             (*f)(Arr, i);
             time = clock() - time;
-            result += ((long double)time) / CLOCKS_PER_SEC;
+            result += ((double)time) / CLOCKS_PER_SEC;
         }
         result /= 10;
-        printf("Rosnąca %d: %Lf ms\n", i, result * 1000);
+        printf("Incrementing %d: %f ms\n", i, result * 1000);
     }
     printf("\n");
     for (int i = rep; i <= rep * 10; i += rep) {
-        long double result = 0;
+        result = 0;
         int* Arr;
         for (int j = 0; j < 10; j++) {
             Arr = deincr(i);
             time = clock();
             (*f)(Arr, i);
             time = clock() - time;
-            result += ((long double)time) / CLOCKS_PER_SEC;
+            result += ((double)time) / CLOCKS_PER_SEC;
         }
         result /= 10;
-        printf("Malejąca %d: %Lf ms\n", i, result * 1000);
+        printf("Deincrementing %d: %f ms\n", i, result * 1000);
     }
     printf("\n");
     for (int i = rep; i <= rep * 10; i += rep) {
-        long double result = 0;
+        result = 0;
         int* Arr;
         for (int j = 0; j < 10; j++) {
             Arr = ashape(i);
             time = clock();
             (*f)(Arr, i);
             time = clock() - time;
-            result += ((long double)time) / CLOCKS_PER_SEC;
+            result += ((double)time) / CLOCKS_PER_SEC;
         }
         result /= 10;
-        printf("Malejąca %d: %Lf ms\n", i, result * 1000);
+        printf("A-shaped %d: %f ms\n", i, result * 1000);
     }
     printf("\n");
     for (int i = rep; i <= rep * 10; i += rep) {
-        long double result = 0;
+        result = 0;
         int* Arr;
         for (int j = 0; j < 10; j++) {
             Arr = vshape(i);
             time = clock();
             (*f)(Arr, i);
             time = clock() - time;
-            result += ((long double)time) / CLOCKS_PER_SEC;
+            result += ((double)time) / CLOCKS_PER_SEC;
         }
         result /= 10;
-        printf("Malejąca %d: %Lf ms\n", i, result * 1000);
+        printf("V-shaped %d: %f ms\n", i, result * 1000);
     }
     printf("\n");
     for (int i = rep; i <= rep * 10; i += rep) {
-        long double result = 0;
+        result = 0;
         int* Arr;
-        for (int j = 0; j < 100; j++) {
+        for (int j = 0; j < 10; j++) {
             Arr = randomowa(i);
             time = clock();
             (*f)(Arr, i);
             time = clock() - time;
-            result += ((long double)time) / CLOCKS_PER_SEC;
+            result += ((double)time) / CLOCKS_PER_SEC;
         }
-        result /= 100;
-        printf("Malejąca %d: %Lf ms\n", i, result * 1000);
+        result /= 10;
+        printf("Random %d: %f ms\n", i, result * 1000);
     }
 }
 
@@ -145,22 +170,6 @@ void wykr3() {
 }
 
 void wykr4() {
-}
-
-int main(void) {
-    setlocale(LC_ALL, "");
-    wykr1(insertionSort, "Insertion Sort", 10000);
-    printf("\n\n");
-    wykr1(selectionSort, "Selection Sort", 10000);
-    printf("\n\n");
-    wykr1(bubbleSort, "Bubble Sort", 10000);
-    printf("\n\n");
-    wykr1(heapSort, "Heap Sort", 100000);
-    printf("\n\n");
-    wykr1(mergeSortStart, "Merge Sort", 100000);
-    printf("\n\n");
-    wykr1(quickSortStart, "Quicksort", 10000);
-    return 0;
 }
 
 void swap(int* a, int* b) {
@@ -384,7 +393,8 @@ void merge(int Arr[], int l, int m, int r) {
     int n1 = m - l + 1;
     int n2 = r - m;
 
-    int L[n1], R[n2];
+    int* L = malloc(n1 * sizeof(int));
+    int* R = malloc(n2 * sizeof(int));
 
     for (int i = 0; i < n1; i++) {
         L[i] = Arr[l + i];
@@ -412,13 +422,17 @@ void merge(int Arr[], int l, int m, int r) {
     while (j < n2) {
         Arr[k++] = R[j++];
     }
+
+    free(L);
+    free(R);
 }
 
 void merge2(int Arr[], int l, int m, int r, int* total) {
     int n1 = m - l + 1;
     int n2 = r - m;
 
-    int L[n1], R[n2];
+    int* L = malloc(n1 * sizeof(int));
+    int* R = malloc(n2 * sizeof(int));
 
     for (int i = 0; i < n1; i++) {
         L[i] = Arr[l + i];
@@ -446,6 +460,9 @@ void merge2(int Arr[], int l, int m, int r, int* total) {
     while (j < n2) {
         Arr[k++] = R[j++];
     }
+
+    free(L);
+    free(R);
 }
 
 void mergeSort(int Arr[], int l, int r) {
